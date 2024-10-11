@@ -1,66 +1,47 @@
 <template>
-  <el-container v-if="isLoggedIn && !isLoginOrRegister">
-    <el-aside width="200px">
-      <SideMenu />
-    </el-aside>
-    <el-container>
-      <el-header>
-        <Header />
-      </el-header>
-      <el-main>
-        <router-view />
-      </el-main>
-    </el-container>
-  </el-container>
-  <router-view v-else />
+  <el-config-provider :locale="zhCn">
+    <router-view />
+  </el-config-provider>
 </template>
 
 <script>
-import { computed } from 'vue'
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
-import SideMenu from '@/components/SideMenu.vue'
-import Header from '@/components/Header.vue'
+import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 
 export default {
   name: 'App',
   components: {
-    SideMenu,
-    Header
+    ElConfigProvider,
   },
   setup() {
     const store = useStore()
-    const route = useRoute()
-    const isLoggedIn = computed(() => store.getters['auth/isLoggedIn'])
-    const isLoginOrRegister = computed(() => {
-      return route.name === 'Login' || route.name === 'Register'
+    const router = useRouter()
+
+    onMounted(() => {
+      if (!store.state.isAuthenticated && router.currentRoute.value.path !== '/login') {
+        router.push('/login')
+      }
     })
 
     return {
-      isLoggedIn,
-      isLoginOrRegister
+      zhCn,
     }
-  }
+  },
 }
 </script>
 
 <style>
+@import 'element-plus/dist/index.css';
+
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
   height: 100vh;
-}
-
-.el-header {
-  background-color: #B3C0D1;
-  color: #333;
-  line-height: 60px;
-}
-
-.el-aside {
-  background-color: #D3DCE6;
-  color: #333;
 }
 </style>

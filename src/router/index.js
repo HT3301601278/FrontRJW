@@ -1,52 +1,49 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import store from '@/store'
+import LoginView from '../views/LoginView.vue'
+import MainLayout from '../layouts/MainLayout.vue'
+import DashboardView from '../views/DashboardView.vue'
+import DeviceManagementView from '../views/DeviceManagementView.vue'
+import DataAnalysisView from '../views/DataAnalysisView.vue'
+import AlertCenterView from '../views/AlertCenterView.vue'
+import ProfileView from '../views/ProfileView.vue'
 
 const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/Login.vue')
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: () => import('@/views/Register.vue')
+    component: LoginView
   },
   {
     path: '/',
-    name: 'Dashboard',
-    component: () => import('@/views/Dashboard.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/devices',
-    name: 'Devices',
-    component: () => import('@/views/Devices.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/analysis',
-    name: 'Analysis',
-    component: () => import('@/views/Analysis.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/alerts',
-    name: 'Alerts',
-    component: () => import('@/views/Alerts.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/users',
-    name: 'Users',
-    component: () => import('@/views/Users.vue'),
-    meta: { requiresAuth: true, requiresAdmin: true }
-  },
-  {
-    path: '/change-password',
-    name: 'ChangePassword',
-    component: () => import('@/views/ChangePassword.vue'),
-    meta: { requiresAuth: true }
+    component: MainLayout,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'Dashboard',
+        component: DashboardView
+      },
+      {
+        path: 'devices',
+        name: 'DeviceManagement',
+        component: DeviceManagementView
+      },
+      {
+        path: 'analysis',
+        name: 'DataAnalysis',
+        component: DataAnalysisView
+      },
+      {
+        path: 'alerts',
+        name: 'AlertCenter',
+        component: AlertCenterView
+      },
+      {
+        path: 'profile',
+        name: 'Profile',
+        component: ProfileView
+      }
+    ]
   }
 ]
 
@@ -56,10 +53,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isLoggedIn = store.getters['auth/isLoggedIn']
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
-  if (requiresAuth && !isLoggedIn) {
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
+  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
     next('/login')
   } else {
     next()

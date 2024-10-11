@@ -1,14 +1,29 @@
 import { createStore } from 'vuex'
-import auth from './modules/auth'
-import devices from './modules/devices'
-import alerts from './modules/alerts'
-import users from './modules/users'
 
 export default createStore({
-  modules: {
-    auth,
-    devices,
-    alerts,
-    users
+  state: {
+    isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
+    user: JSON.parse(localStorage.getItem('user')) || null
+  },
+  mutations: {
+    setAuthenticated(state, value) {
+      state.isAuthenticated = value
+      localStorage.setItem('isAuthenticated', value)
+    },
+    setUser(state, user) {
+      state.user = user
+      localStorage.setItem('user', JSON.stringify(user))
+    }
+  },
+  actions: {
+    login({ commit }, user) {
+      commit('setAuthenticated', true)
+      commit('setUser', user)
+    },
+    logout({ commit }) {
+      commit('setAuthenticated', false)
+      commit('setUser', null)
+      localStorage.removeItem('user')
+    }
   }
 })

@@ -1,0 +1,148 @@
+<template>
+    <div class="dashboard">
+      <h2>仪表盘</h2>
+      <el-row :gutter="20">
+        <el-col :span="6" v-for="(card, index) in cards" :key="index">
+          <el-card class="dashboard-card" :body-style="{ padding: '0px' }">
+            <div class="card-content">
+              <el-icon :size="40" :color="card.color">
+                <component :is="card.icon" />
+              </el-icon>
+              <div class="card-info">
+                <div class="card-title">{{ card.title }}</div>
+                <div class="card-value">{{ card.value }}</div>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+  
+      <el-row :gutter="20" class="chart-row">
+        <el-col :span="16">
+          <el-card>
+            <template #header>
+              <div class="card-header">
+                <span>实时光强曲线图</span>
+              </div>
+            </template>
+            <div ref="lightIntensityChart" style="height: 300px;"></div>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card>
+            <template #header>
+              <div class="card-header">
+                <span>最近警报</span>
+              </div>
+            </template>
+            <el-table :data="recentAlerts" style="width: 100%">
+              <el-table-column prop="time" label="时间" width="180"></el-table-column>
+              <el-table-column prop="device" label="设备"></el-table-column>
+              <el-table-column prop="type" label="类型"></el-table-column>
+            </el-table>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+  </template>
+  
+  <script>
+  import { ref, onMounted, reactive } from 'vue'
+  import { Monitor, Sunny, Warning, DataLine } from '@element-plus/icons-vue'
+  import * as echarts from 'echarts'
+  
+  export default {
+    name: 'DashboardView',
+    components: { Monitor, Sunny, Warning, DataLine },
+    setup() {
+      const lightIntensityChart = ref(null)
+      const chart = ref(null)
+  
+      const cards = reactive([
+        { title: '总设备数量', value: 42, icon: 'Monitor', color: '#409EFF' },
+        { title: '在线设备数量', value: 38, icon: 'Sunny', color: '#67C23A' },
+        { title: '平均光强', value: '756 lux', icon: 'DataLine', color: '#E6A23C' },
+        { title: '异常设备数量', value: 2, icon: 'Warning', color: '#F56C6C' },
+      ])
+  
+      const recentAlerts = ref([
+        { time: '2023-06-01 10:30', device: '设备A', type: '光强过高' },
+        { time: '2023-06-01 09:15', device: '设备B', type: '离线' },
+        { time: '2023-05-31 23:45', device: '设备C', type: '光强过低' },
+      ])
+  
+      onMounted(() => {
+        chart.value = echarts.init(lightIntensityChart.value)
+        const option = {
+          title: {
+            text: '实时光强'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          xAxis: {
+            type: 'category',
+            data: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00']
+          },
+          yAxis: {
+            type: 'value',
+            name: '光强 (lux)'
+          },
+          series: [{
+            data: [320, 280, 250, 500, 800, 750, 600, 400],
+            type: 'line',
+            smooth: true
+          }]
+        }
+        chart.value.setOption(option)
+      })
+  
+      return {
+        cards,
+        recentAlerts,
+        lightIntensityChart
+      }
+    }
+  }
+  </script>
+  
+  <style scoped>
+  .dashboard {
+    padding: 20px;
+  }
+  
+  .dashboard-card {
+    margin-bottom: 20px;
+  }
+  
+  .card-content {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .card-info {
+    margin-left: 20px;
+  }
+  
+  .card-title {
+    font-size: 14px;
+    color: #909399;
+  }
+  
+  .card-value {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  
+  .chart-row {
+    margin-top: 20px;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  </style>
