@@ -147,10 +147,28 @@ export default {
   padding: 20px;
 }
 
+.page-title {
+  font-size: 24px;
+  color: #1e88e5;
+  margin-bottom: 20px;
+}
+
+.main-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(30, 136, 229, 0.1);
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #1e88e5;
 }
 
 .user-info-card, .password-card {
@@ -169,6 +187,7 @@ export default {
 
 .user-details h3 {
   margin-bottom: 10px;
+  color: #1e88e5;
 }
 
 .user-details p {

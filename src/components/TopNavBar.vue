@@ -1,6 +1,6 @@
 <template>
   <div class="top-nav-bar">
-    <div class="logo">反应器压力在线监测系统</div>
+    <div class="logo">反应器温度在线监测系统</div>
     <el-menu
       mode="horizontal"
       background-color="#f0f2f5"

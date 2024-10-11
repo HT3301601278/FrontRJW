@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
-    <h2 class="dashboard-title">反应器压力监测仪表盘</h2>
-    
+    <h2 class="dashboard-title">反应器温度监测仪表盘</h2>
+
     <el-row :gutter="20">
       <el-col :span="6" v-for="(card, index) in cards" :key="index">
         <el-card class="dashboard-card" :body-style="{ padding: '0px' }">
@@ -23,7 +23,7 @@
         <el-card class="chart-card">
           <template #header>
             <div class="card-header">
-              <span>实时压力曲线图</span>
+              <span>实时温度曲线图</span>
               <el-select v-model="selectedReactor" placeholder="选择反应器" size="small">
                 <el-option v-for="reactor in reactors" :key="reactor.id" :label="reactor.name" :value="reactor.id"></el-option>
               </el-select>
@@ -89,7 +89,7 @@ export default {
     const cards = reactive([
       { title: '总反应器数量', value: 42, icon: 'Monitor', color: '#409EFF' },
       { title: '在线反应器数量', value: 38, icon: 'Sunny', color: '#67C23A' },
-      { title: '平均压力', value: '5.6 MPa', icon: 'DataLine', color: '#E6A23C' },
+      { title: '平均温度', value: '5.6 MPa', icon: 'DataLine', color: '#E6A23C' },
       { title: '异常反应器数量', value: 2, icon: 'Warning', color: '#F56C6C' },
     ])
 
@@ -101,9 +101,9 @@ export default {
     ]
 
     const recentAlerts = ref([
-      { time: '2023-06-01 10:30', reactor: '反应器A', type: '压力过高', status: '未解决' },
+      { time: '2023-06-01 10:30', reactor: '反应器A', type: '温度过高', status: '未解决' },
       { time: '2023-06-01 09:15', reactor: '反应器B', type: '离线', status: '已解决' },
-      { time: '2023-05-31 23:45', reactor: '反应器C', type: '压力过低', status: '未解决' },
+      { time: '2023-05-31 23:45', reactor: '反应器C', type: '温度过低', status: '未解决' },
       { time: '2023-05-31 20:10', reactor: '反应器D', type: '温度异常', status: '已解决' },
     ])
 
@@ -111,7 +111,7 @@ export default {
       const chart = echarts.init(pressureChart.value)
       const option = {
         title: {
-          text: '实时压力'
+          text: '实时温度'
         },
         tooltip: {
           trigger: 'axis'
@@ -122,7 +122,7 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: '压力 (MPa)'
+          name: '温度 (℃)'
         },
         series: [{
           data: [3.2, 2.8, 2.5, 5.0, 8.0, 7.5, 6.0, 4.0],
@@ -211,7 +211,7 @@ export default {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #303133;
+  color: #1e88e5;
 }
 
 .dashboard-card {
@@ -223,7 +223,7 @@ export default {
 
 .dashboard-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(30, 136, 229, 0.2);
 }
 
 .card-content {

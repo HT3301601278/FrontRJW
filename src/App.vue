@@ -44,4 +44,27 @@ body {
 #app {
   height: 100vh;
 }
+
+/* 全局蓝色主题样式 */
+:root {
+  --el-color-primary: #1e88e5;
+}
+
+.el-button--primary {
+  --el-button-bg-color: #1e88e5;
+  --el-button-border-color: #1e88e5;
+}
+
+.el-button--primary:hover {
+  --el-button-hover-bg-color: #1976d2;
+  --el-button-hover-border-color: #1976d2;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #1e88e5;
+}
+
+.el-menu--horizontal>.el-menu-item.is-active {
+  border-bottom-color: #1e88e5;
+}
 </style>

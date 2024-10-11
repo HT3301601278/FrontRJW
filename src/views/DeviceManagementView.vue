@@ -17,7 +17,7 @@
           </el-input>
         </div>
       </template>
-      
+
       <el-table :data="filteredDevices" style="width: 100%" :row-class-name="tableRowClassName">
         <el-table-column prop="name" label="反应器名称">
           <template #default="scope">
@@ -45,7 +45,7 @@
           </template>
         </el-table-column>
       </el-table>
-      
+
       <div class="pagination-container">
         <el-pagination
           @size-change="handleSizeChange"
@@ -71,7 +71,7 @@
         <el-form-item label="连接方式" prop="communicationChannel">
           <el-input v-model="newDevice.communicationChannel"></el-input>
         </el-form-item>
-        <el-form-item label="压力阈值 (MPa)" prop="threshold">
+        <el-form-item label="温度阈值 (℃)" prop="threshold">
           <el-input-number
             v-model="newDevice.threshold"
             :min="0"
@@ -108,11 +108,11 @@
             {{ selectedDevice.isOn ? '在线' : '离线' }}
           </el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="压力阈值 (MPa)">{{ selectedDevice.threshold }}</el-descriptions-item>
+        <el-descriptions-item label="温度阈值 (℃)">{{ selectedDevice.threshold }}</el-descriptions-item>
       </el-descriptions>
-      
+
       <el-divider content-position="left">反应器控制</el-divider>
-      
+
       <el-form label-position="top">
         <el-form-item label="反应器开关">
           <el-switch
@@ -122,7 +122,7 @@
             inactive-text="关闭"
           ></el-switch>
         </el-form-item>
-        <el-form-item label="压力阈值设置 (MPa)">
+        <el-form-item label="温度阈值设置 (℃)">
           <el-input-number
             v-model="selectedDevice.threshold"
             :min="0"
@@ -133,9 +133,9 @@
           ></el-input-number>
         </el-form-item>
       </el-form>
-      
+
       <el-divider content-position="left">最近数据</el-divider>
-      
+
       <div ref="recentDataChart" style="height: 300px;"></div>
     </el-drawer>
   </div>
@@ -282,7 +282,7 @@ export default {
       const chart = echarts.init(recentDataChart.value)
       const option = {
         title: {
-          text: '最近24小时压力数据'
+          text: '最近24小时温度数据'
         },
         tooltip: {
           trigger: 'axis'
@@ -293,7 +293,7 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: '压力 (MPa)'
+          name: '温度 (℃)'
         },
         series: [{
           data: [320, 280, 250, 500, 800, 750, 600, 400],
@@ -370,12 +370,12 @@ export default {
 
 .page-title {
   font-size: 24px;
-  color: #303133;
+  color: #1e88e5;
   margin-bottom: 20px;
 }
 
 .main-card {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 rgba(30, 136, 229, 0.1);
 }
 
 .card-header {
@@ -396,11 +396,11 @@ export default {
 .device-name .el-icon {
   margin-right: 8px;
   font-size: 18px;
-  color: #909399;
+  color: #1e88e5;
 }
 
 .device-name .el-icon.is-active {
-  color: #67C23A;
+  color: #1e88e5;
 }
 
 .pagination-container {
@@ -427,24 +427,25 @@ export default {
 .el-divider__text {
   font-size: 16px;
   font-weight: bold;
+  color: #1e88e5;
 }
 
 /* 为表格添加交替背景色 */
 .el-table .el-table__row:nth-child(even) {
-  background-color: #f9fafc;
+  background-color: #e3f2fd;
 }
 
 /* 鼠标悬停效果 */
 .el-table .el-table__row:hover {
-  background-color: #ecf5ff;
+  background-color: #bbdefb;
 }
 
 /* 自定义表格行样式 */
 .el-table .warning-row {
-  background-color: #fdf5e6;
+  background-color: #fff3e0;
 }
 
 .el-table .success-row {
-  background-color: #f0f9eb;
+  background-color: #e8f5e9;
 }
 </style>

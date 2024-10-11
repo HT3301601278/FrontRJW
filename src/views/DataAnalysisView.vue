@@ -31,8 +31,8 @@
           <el-card class="chart-card">
             <template #header>
               <div class="chart-header">
-                <h3>压力趋势图</h3>
-                <el-tooltip content="显示选定时间范围内的压力变化趋势" placement="top">
+                <h3>温度趋势图</h3>
+                <el-tooltip content="显示选定时间范围内的温度变化趋势" placement="top">
                   <el-icon><InfoFilled /></el-icon>
                 </el-tooltip>
               </div>
@@ -44,8 +44,8 @@
           <el-card class="chart-card">
             <template #header>
               <div class="chart-header">
-                <h3>压力分布</h3>
-                <el-tooltip content="显示不同压力级别的分布情况" placement="top">
+                <h3>温度分布</h3>
+                <el-tooltip content="显示不同温度级别的分布情况" placement="top">
                   <el-icon><InfoFilled /></el-icon>
                 </el-tooltip>
               </div>
@@ -59,8 +59,8 @@
           <el-card class="chart-card">
             <template #header>
               <div class="chart-header">
-                <h3>设备压力详情</h3>
-                <el-tooltip content="显示选中设备的平均、最大和最小压力" placement="top">
+                <h3>设备温度详情</h3>
+                <el-tooltip content="显示选中设备的平均、最大和最小温度" placement="top">
                   <el-icon><InfoFilled /></el-icon>
                 </el-tooltip>
               </div>
@@ -186,7 +186,7 @@ export default {
 
       const option = {
         title: {
-          text: '压力趋势图'
+          text: '温度趋势图'
         },
         tooltip: {
           trigger: 'axis'
@@ -206,7 +206,7 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: '压力 (MPa)'
+          name: '温度 (℃)'
         },
         series: [{
           data: sampledData.map(item => [item.time, item.value]),
@@ -240,7 +240,7 @@ export default {
 
       const option = {
         title: {
-          text: '压力分布',
+          text: '温度分布',
           left: 'center'
         },
         tooltip: {
@@ -252,7 +252,7 @@ export default {
         },
         series: [
           {
-            name: '压力分布',
+            name: '温度分布',
             type: 'pie',
             radius: '50%',
             data: Object.entries(categories).map(([name, value]) => ({ name, value })),
@@ -273,7 +273,7 @@ export default {
       const chart = echarts.init(deviceComparisonChart.value)
       const option = {
         title: {
-          text: '设备压力详情'
+          text: '设备温度详情'
         },
         tooltip: {
           trigger: 'axis',
@@ -297,22 +297,22 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '压力 (MPa)'
+            name: '温度 (℃)'
           }
         ],
         series: [
           {
-            name: '平均压力',
+            name: '平均温度',
             type: 'bar',
             data: [avg]
           },
           {
-            name: '最大压力',
+            name: '最大温度',
             type: 'bar',
             data: [max]
           },
           {
-            name: '最小压力',
+            name: '最小温度',
             type: 'bar',
             data: [min]
           }
@@ -353,34 +353,35 @@ export default {
 
 .page-title {
   font-size: 24px;
-  color: #303133;
+  color: #1e88e5;
   margin-bottom: 20px;
 }
 
 .main-card {
-  background-color: #f5f7fa;
+  background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 rgba(30, 136, 229, 0.1);
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e3f2fd;
 }
 
 .chart-card {
   height: 100%;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 rgba(30, 136, 229, 0.1);
   transition: all 0.3s ease;
 }
 
 .chart-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(30, 136, 229, 0.2);
 }
 
 .chart-header {
@@ -388,13 +389,13 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  border-bottom: 1px solid #ebeef5;
+  border-bottom: 1px solid #e3f2fd;
 }
 
 .chart-header h3 {
   margin: 0;
   font-size: 18px;
-  color: #303133;
+  color: #1e88e5;
 }
 
 .chart {
@@ -412,7 +413,7 @@ export default {
 
 :deep(.el-card__header) {
   padding: 15px 20px;
-  border-bottom: 1px solid #ebeef5;
+  border-bottom: 1px solid #e3f2fd;
 }
 
 :deep(.el-card__body) {

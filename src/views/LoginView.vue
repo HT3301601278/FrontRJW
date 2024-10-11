@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-card class="login-card">
       <template #header>
-        <h2 class="system-title">反应器压力在线监测系统</h2>
+        <h2 class="system-title">反应器温度在线监测系统</h2>
       </template>
       <el-form :model="loginForm" :rules="rules" ref="loginFormRef">
         <el-form-item prop="username">
@@ -221,7 +221,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e88e5 0%, #3949ab 100%);
 }
 
 .login-card {
@@ -234,11 +234,13 @@ export default {
 .system-title {
   text-align: center;
   margin: 0;
-  color: #333;
+  color: #1e88e5;
 }
 
 .login-button {
   width: 100%;
+  background-color: #1e88e5;
+  border-color: #1e88e5;
 }
 
 .register-link {
@@ -252,7 +254,7 @@ export default {
 }
 
 .register-dialog .el-dialog__header {
-  background-color: #409EFF;
+  background-color: #1e88e5;
   padding: 20px;
 }
 

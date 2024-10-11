@@ -192,14 +192,14 @@ export default {
 
 .page-title {
   font-size: 24px;
-  color: #303133;
+  color: #1e88e5;
   margin-bottom: 20px;
 }
 
 .main-card {
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 rgba(30, 136, 229, 0.1);
 }
 
 .card-header {
@@ -212,7 +212,7 @@ export default {
 .card-header h3 {
   margin: 0;
   font-size: 18px;
-  color: #303133;
+  color: #1e88e5;
 }
 
 .filter-form {
@@ -243,11 +243,11 @@ export default {
 }
 
 .el-table :deep(.el-table__header) {
-  background-color: #f5f7fa;
+  background-color: #e3f2fd;
 }
 
 .el-table :deep(.el-table__row:hover) {
-  background-color: #f5f7fa;
+  background-color: #bbdefb;
 }
 
 .el-tag {
