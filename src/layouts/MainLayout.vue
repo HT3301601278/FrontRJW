@@ -1,12 +1,9 @@
 <template>
     <el-container class="layout-container">
-      <el-aside width="200px">
-        <SideMenu />
-      </el-aside>
+      <el-header height="60px">
+        <TopNavBar />
+      </el-header>
       <el-container>
-        <el-header>
-          <TopNavBar />
-        </el-header>
         <el-main>
           <router-view />
         </el-main>
@@ -16,13 +13,11 @@
   
   <script>
   import { defineComponent } from 'vue'
-  import SideMenu from '@/components/SideMenu.vue'
   import TopNavBar from '@/components/TopNavBar.vue'
   
   export default defineComponent({
     name: 'MainLayout',
     components: {
-      SideMenu,
       TopNavBar
     }
   })
@@ -34,19 +29,15 @@
   }
   
   .el-header {
-    background-color: #fff;
-    color: #333;
-    line-height: 60px;
-    box-shadow: 0 1px 4px rgba(0,21,41,.08);
-  }
-  
-  .el-aside {
-    background-color: #001529;
-    color: #fff;
+    padding: 0;
+    background-color: #f0f2f5;
+    color: #303133;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
   }
   
   .el-main {
-    background-color: #f0f2f5;
+    background-color: #ffffff;
     color: #333;
+    padding: 20px;
   }
   </style>
