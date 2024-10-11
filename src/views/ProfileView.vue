@@ -2,22 +2,39 @@
   <div class="profile">
     <h2>个人中心</h2>
     <el-row :gutter="20">
-      <el-col :span="12">
-        <el-card>
+      <el-col :span="8">
+        <el-card class="user-info-card">
+          <template #header>
+            <div class="card-header">
+              <span>用户信息</span>
+            </div>
+          </template>
+          <div class="user-avatar">
+            <el-avatar :size="100" :src="userAvatar"></el-avatar>
+          </div>
+          <div class="user-details">
+            <h3>{{ username }}</h3>
+            <p>用户ID: {{ userId }}</p>
+            <p>上次登录: {{ lastLogin }}</p>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="16">
+        <el-card class="password-card">
           <template #header>
             <div class="card-header">
               <span>修改密码</span>
             </div>
           </template>
-          <el-form :model="passwordForm" :rules="passwordRules" ref="passwordFormRef">
+          <el-form :model="passwordForm" :rules="passwordRules" ref="passwordFormRef" label-width="100px">
             <el-form-item label="旧密码" prop="oldPassword">
-              <el-input v-model="passwordForm.oldPassword" type="password"></el-input>
+              <el-input v-model="passwordForm.oldPassword" type="password" show-password></el-input>
             </el-form-item>
             <el-form-item label="新密码" prop="newPassword">
-              <el-input v-model="passwordForm.newPassword" type="password"></el-input>
+              <el-input v-model="passwordForm.newPassword" type="password" show-password></el-input>
             </el-form-item>
             <el-form-item label="确认新密码" prop="confirmPassword">
-              <el-input v-model="passwordForm.confirmPassword" type="password"></el-input>
+              <el-input v-model="passwordForm.confirmPassword" type="password" show-password></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="changePassword">修改密码</el-button>
@@ -30,7 +47,7 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
 import { useStore } from 'vuex'
@@ -106,11 +123,20 @@ export default {
       })
     }
 
+    const username = computed(() => store.state.user.username)
+    const userId = computed(() => store.state.user.id)
+    const userAvatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
+    const lastLogin = ref('2023-06-01 10:30:00') // 这里应该从后端获取实际的最后登录时间
+
     return {
       passwordForm,
       passwordRules,
       passwordFormRef,
-      changePassword
+      changePassword,
+      username,
+      userId,
+      userAvatar,
+      lastLogin
     }
   }
 }
@@ -127,7 +153,31 @@ export default {
   align-items: center;
 }
 
-.el-card {
+.user-info-card, .password-card {
+  height: 100%;
+}
+
+.user-avatar {
+  display: flex;
+  justify-content: center;
   margin-bottom: 20px;
+}
+
+.user-details {
+  text-align: center;
+}
+
+.user-details h3 {
+  margin-bottom: 10px;
+}
+
+.user-details p {
+  margin: 5px 0;
+  color: #606266;
+}
+
+.el-form {
+  max-width: 400px;
+  margin: 0 auto;
 }
 </style>

@@ -12,7 +12,12 @@ export default createStore({
     },
     setUser(state, user) {
       state.user = user
+      state.isAuthenticated = true
       localStorage.setItem('user', JSON.stringify(user))
+    },
+    clearUser(state) {
+      state.user = null
+      state.isAuthenticated = false
     }
   },
   actions: {

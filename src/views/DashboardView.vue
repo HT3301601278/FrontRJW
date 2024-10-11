@@ -22,10 +22,10 @@
           <el-card>
             <template #header>
               <div class="card-header">
-                <span>实时光强曲线图</span>
+                <span>实时压力曲线图</span>
               </div>
             </template>
-            <div ref="lightIntensityChart" style="height: 300px;"></div>
+            <div ref="pressureChart" style="height: 300px;"></div>
           </el-card>
         </el-col>
         <el-col :span="8">
@@ -37,7 +37,7 @@
             </template>
             <el-table :data="recentAlerts" style="width: 100%">
               <el-table-column prop="time" label="时间" width="180"></el-table-column>
-              <el-table-column prop="device" label="设备"></el-table-column>
+              <el-table-column prop="device" label="反应器"></el-table-column>
               <el-table-column prop="type" label="类型"></el-table-column>
             </el-table>
           </el-card>
@@ -55,27 +55,27 @@
     name: 'DashboardView',
     components: { Monitor, Sunny, Warning, DataLine },
     setup() {
-      const lightIntensityChart = ref(null)
+      const pressureChart = ref(null)
       const chart = ref(null)
   
       const cards = reactive([
-        { title: '总设备数量', value: 42, icon: 'Monitor', color: '#409EFF' },
-        { title: '在线设备数量', value: 38, icon: 'Sunny', color: '#67C23A' },
-        { title: '平均光强', value: '756 lux', icon: 'DataLine', color: '#E6A23C' },
-        { title: '异常设备数量', value: 2, icon: 'Warning', color: '#F56C6C' },
+        { title: '总反应器数量', value: 42, icon: 'Monitor', color: '#409EFF' },
+        { title: '在线反应器数量', value: 38, icon: 'Sunny', color: '#67C23A' },
+        { title: '平均压力', value: '5.6 MPa', icon: 'DataLine', color: '#E6A23C' },
+        { title: '异常反应器数量', value: 2, icon: 'Warning', color: '#F56C6C' },
       ])
   
       const recentAlerts = ref([
-        { time: '2023-06-01 10:30', device: '设备A', type: '光强过高' },
-        { time: '2023-06-01 09:15', device: '设备B', type: '离线' },
-        { time: '2023-05-31 23:45', device: '设备C', type: '光强过低' },
+        { time: '2023-06-01 10:30', device: '反应器A', type: '压力过高' },
+        { time: '2023-06-01 09:15', device: '反应器B', type: '离线' },
+        { time: '2023-05-31 23:45', device: '反应器C', type: '压力过低' },
       ])
   
       onMounted(() => {
-        chart.value = echarts.init(lightIntensityChart.value)
+        chart.value = echarts.init(pressureChart.value)
         const option = {
           title: {
-            text: '实时光强'
+            text: '实时压力'
           },
           tooltip: {
             trigger: 'axis'
@@ -86,10 +86,10 @@
           },
           yAxis: {
             type: 'value',
-            name: '光强 (lux)'
+            name: '压力 (MPa)'
           },
           series: [{
-            data: [320, 280, 250, 500, 800, 750, 600, 400],
+            data: [3.2, 2.8, 2.5, 5.0, 8.0, 7.5, 6.0, 4.0],
             type: 'line',
             smooth: true
           }]
@@ -100,7 +100,7 @@
       return {
         cards,
         recentAlerts,
-        lightIntensityChart
+        pressureChart
       }
     }
   }

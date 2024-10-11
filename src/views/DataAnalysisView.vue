@@ -158,7 +158,7 @@ export default {
 
       const option = {
         title: {
-          text: '光强趋势图'
+          text: '压力趋势图'
         },
         tooltip: {
           trigger: 'axis'
@@ -178,7 +178,7 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: '光强 (lux)'
+          name: '压力 (MPa)'
         },
         series: [{
           data: sampledData.map(item => [item.time, item.value]),
@@ -192,27 +192,27 @@ export default {
     const updateLightIntensityDistributionChart = (values) => {
       const chart = echarts.init(lightIntensityDistributionChart.value)
       const categories = {
-        '强光': 0,
-        '中等光': 0,
-        '弱光': 0,
-        '微光': 0
+        '强压': 0,
+        '中等压': 0,
+        '弱压': 0,
+        '微压': 0
       }
 
       values.forEach(value => {
         if (value > 1000) {
-          categories['强光']++
+          categories['强压']++
         } else if (value > 500) {
-          categories['中等光']++
+          categories['中等压']++
         } else if (value > 100) {
-          categories['弱光']++
+          categories['弱压']++
         } else {
-          categories['微光']++
+          categories['微压']++
         }
       })
 
       const option = {
         title: {
-          text: '光强分布',
+          text: '压力分布',
           left: 'center'
         },
         tooltip: {
@@ -224,7 +224,7 @@ export default {
         },
         series: [
           {
-            name: '光强分布',
+            name: '压力分布',
             type: 'pie',
             radius: '50%',
             data: Object.entries(categories).map(([name, value]) => ({ name, value })),
@@ -245,7 +245,7 @@ export default {
       const chart = echarts.init(deviceComparisonChart.value)
       const option = {
         title: {
-          text: '设备光强详情'
+          text: '设备压力详情'
         },
         tooltip: {
           trigger: 'axis',
@@ -269,22 +269,22 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '光强 (lux)'
+            name: '压力 (MPa)'
           }
         ],
         series: [
           {
-            name: '平均光强',
+            name: '平均压力',
             type: 'bar',
             data: [avg]
           },
           {
-            name: '最大光强',
+            name: '最大压力',
             type: 'bar',
             data: [max]
           },
           {
-            name: '最小光强',
+            name: '最小压力',
             type: 'bar',
             data: [min]
           }

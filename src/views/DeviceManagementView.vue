@@ -1,24 +1,24 @@
 <template>
   <div class="device-management">
-    <h2>设备管理</h2>
+    <h2>反应器管理</h2>
     <el-row :gutter="20">
       <el-col :span="24">
         <el-card>
           <template #header>
             <div class="card-header">
-              <el-button type="primary" @click="showAddDeviceDialog">添加设备</el-button>
+              <el-button type="primary" @click="showAddDeviceDialog">添加反应器</el-button>
               <el-input
                 v-model="searchQuery"
-                placeholder="搜索设备"
+                placeholder="搜索反应器"
                 style="width: 200px;"
                 @input="handleSearch"
               ></el-input>
             </div>
           </template>
           <el-table :data="filteredDevices" style="width: 100%">
-            <el-table-column prop="name" label="设备名称"></el-table-column>
+            <el-table-column prop="name" label="反应器名称"></el-table-column>
             <el-table-column prop="macAddress" label="MAC地址"></el-table-column>
-            <el-table-column prop="communicationChannel" label="通信通道"></el-table-column>
+            <el-table-column prop="communicationChannel" label="连接方式"></el-table-column>
             <el-table-column prop="isOn" label="状态">
               <template #default="scope">
                 <el-tag :type="scope.row.isOn ? 'success' : 'danger'">
@@ -46,23 +46,23 @@
       </el-col>
     </el-row>
 
-    <!-- 添加设备对话框 -->
-    <el-dialog v-model="addDeviceDialogVisible" title="添加设备" width="30%">
+    <!-- 添加反应器对话框 -->
+    <el-dialog v-model="addDeviceDialogVisible" title="添加反应器" width="30%">
       <el-form :model="newDevice" :rules="deviceRules" ref="addDeviceFormRef">
-        <el-form-item label="设备名称" prop="name">
+        <el-form-item label="反应器名称" prop="name">
           <el-input v-model="newDevice.name"></el-input>
         </el-form-item>
         <el-form-item label="MAC地址" prop="macAddress">
           <el-input v-model="newDevice.macAddress"></el-input>
         </el-form-item>
-        <el-form-item label="通信通道" prop="communicationChannel">
+        <el-form-item label="连接方式" prop="communicationChannel">
           <el-input v-model="newDevice.communicationChannel"></el-input>
         </el-form-item>
-        <el-form-item label="阈值" prop="threshold">
+        <el-form-item label="压力阈值 (MPa)" prop="threshold">
           <el-input-number
             v-model="newDevice.threshold"
             :min="0"
-            :max="1000"
+            :max="100"
             :precision="2"
             :step="0.01"
             :controls="false"
@@ -79,35 +79,35 @@
       </template>
     </el-dialog>
 
-    <!-- 设备详情抽屉 -->
+    <!-- 反应器详情抽屉 -->
     <el-drawer
       v-model="deviceDetailsDrawerVisible"
-      title="设备详情"
+      title="反应器详情"
       :with-header="false"
       size="50%"
     >
-      <el-descriptions title="设备信息" :column="1" border>
-        <el-descriptions-item label="设备名称">{{ selectedDevice.name }}</el-descriptions-item>
+      <el-descriptions title="反应器信息" :column="1" border>
+        <el-descriptions-item label="反应器名称">{{ selectedDevice.name }}</el-descriptions-item>
         <el-descriptions-item label="MAC地址">{{ selectedDevice.macAddress }}</el-descriptions-item>
-        <el-descriptions-item label="通信通道">{{ selectedDevice.communicationChannel }}</el-descriptions-item>
+        <el-descriptions-item label="连接方式">{{ selectedDevice.communicationChannel }}</el-descriptions-item>
         <el-descriptions-item label="状态">
           <el-tag :type="selectedDevice.isOn ? 'success' : 'danger'">
             {{ selectedDevice.isOn ? '在线' : '离线' }}
           </el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="阈值">{{ selectedDevice.threshold }}</el-descriptions-item>
+        <el-descriptions-item label="压力阈值 (MPa)">{{ selectedDevice.threshold }}</el-descriptions-item>
       </el-descriptions>
       <el-divider></el-divider>
-      <h3>设备控制</h3>
+      <h3>反应器控制</h3>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="设备开关">
+          <el-form-item label="反应器开关">
             <el-switch v-model="selectedDevice.isOn" @change="toggleDevice"></el-switch>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="阈值设置">
-            <el-input-number v-model="selectedDevice.threshold" :min="0" :max="1000" @change="setDeviceThreshold"></el-input-number>
+          <el-form-item label="压力阈值设置 (MPa)">
+            <el-input-number v-model="selectedDevice.threshold" :min="0" :max="100" :precision="2" :step="0.01" @change="setDeviceThreshold"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -134,7 +134,7 @@ export default {
     const totalElements = ref(0)
 
     const filteredDevices = computed(() => {
-      return devices.value.filter(device => 
+      return devices.value.filter(device =>
         device.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         device.macAddress.toLowerCase().includes(searchQuery.value.toLowerCase())
       )
@@ -257,7 +257,7 @@ export default {
       const chart = echarts.init(recentDataChart.value)
       const option = {
         title: {
-          text: '最近24小时光强数据'
+          text: '最近24小时压力数据'
         },
         tooltip: {
           trigger: 'axis'
@@ -268,7 +268,7 @@ export default {
         },
         yAxis: {
           type: 'value',
-          name: '光强 (lux)'
+          name: '压力 (MPa)'
         },
         series: [{
           data: [320, 280, 250, 500, 800, 750, 600, 400],

@@ -1,6 +1,6 @@
 <template>
     <div class="top-nav-bar">
-      <div class="logo">农作物光强监测系统</div>
+      <div class="logo">反应器压力在线监测系统</div>
       <div class="user-info">
         <el-dropdown>
           <span class="el-dropdown-link">
@@ -20,7 +20,7 @@
       </div>
     </div>
   </template>
-  
+
   <script>
   import { defineComponent, ref } from 'vue'
   import { useRouter } from 'vue-router'
@@ -36,7 +36,7 @@
     setup() {
       const router = useRouter()
       const store = useStore()
-      const username = ref('用户名') // 这里应该从store或API获取用户名
+      const username = ref('用户') // 这里应该从store或API获取用户名
 
       const goToProfile = () => {
         router.push('/profile')
@@ -55,7 +55,7 @@
     }
   })
   </script>
-  
+
   <style scoped>
   .top-nav-bar {
     display: flex;
@@ -64,24 +64,24 @@
     padding: 0 20px;
     height: 60px;
   }
-  
+
   .logo {
     font-size: 18px;
     font-weight: bold;
   }
-  
+
   .user-info {
     display: flex;
     align-items: center;
   }
-  
+
   .el-dropdown-link {
     display: flex;
     align-items: center;
     color: #333;
     cursor: pointer;
   }
-  
+
   .user-icon {
     margin-right: 5px;
     font-size: 20px;
