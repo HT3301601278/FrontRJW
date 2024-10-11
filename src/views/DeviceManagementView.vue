@@ -250,12 +250,14 @@ export default {
 
     const toggleDevice = async (value) => {
       try {
-        await axios.put(`http://47.116.66.208:8080/api/devices/${selectedDevice.value.id}`, {
-          ...selectedDevice.value,
-          isOn: value
-        })
-        ElMessage.success(`设备${value ? '开启' : '关闭'}成功`)
-        fetchDevices()
+        const response = await axios.put(`http://47.116.66.208:8080/api/devices/${selectedDevice.value.id}/toggle`)
+        if (response.data && response.data.id) {
+          ElMessage.success(`设备${response.data.isOn ? '开启' : '关闭'}成功`)
+          selectedDevice.value = response.data
+          fetchDevices()
+        } else {
+          throw new Error('切换设备状态失败')
+        }
       } catch (error) {
         console.error('切换设备状态失败:', error)
         ElMessage.error('切换设备状态失败，请稍后重试')
@@ -307,6 +309,12 @@ export default {
         const response = await axios.get(`http://47.116.66.208:8080/api/devices?page=${currentPage.value - 1}&size=${pageSize.value}`)
         devices.value = response.data.content
         totalElements.value = response.data.totalElements
+        if (selectedDevice.value) {
+          const updatedSelectedDevice = response.data.content.find(device => device.id === selectedDevice.value.id)
+          if (updatedSelectedDevice) {
+            selectedDevice.value = updatedSelectedDevice
+          }
+        }
       } catch (error) {
         console.error('获取设备列表失败:', error)
         ElMessage.error('获取设备列表失败，请稍后重试')
