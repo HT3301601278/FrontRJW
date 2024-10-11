@@ -1,51 +1,75 @@
 <template>
   <div class="data-analysis">
-    <h2>数据分析</h2>
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <el-date-picker
-                v-model="dateRange"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :default-time="[
-                  new Date(2000, 1, 1, 0, 0, 0),
-                  new Date(2000, 1, 1, 23, 59, 59)
-                ]"
-                @change="handleDateRangeChange"
-              ></el-date-picker>
-              <el-select v-model="selectedDevice" placeholder="选择设备" @change="handleDeviceChange" :loading="loading">
-                <el-option
-                  v-for="device in devices"
-                  :key="device.id"
-                  :label="device.name"
-                  :value="device.id"
-                ></el-option>
-              </el-select>
-            </div>
-          </template>
-          <el-row :gutter="20">
-            <el-col :span="16">
-              <div ref="lightIntensityTrendChart" style="height: 400px;"></div>
-            </el-col>
-            <el-col :span="8">
-              <div ref="lightIntensityDistributionChart" style="height: 400px;"></div>
-            </el-col>
-          </el-row>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" style="margin-top: 20px;">
-      <el-col :span="24">
-        <el-card>
-          <div ref="deviceComparisonChart" style="height: 400px;"></div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <h2 class="page-title">数据分析</h2>
+    <el-card class="main-card">
+      <template #header>
+        <div class="card-header">
+          <el-date-picker
+            v-model="dateRange"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :default-time="[
+              new Date(2000, 1, 1, 0, 0, 0),
+              new Date(2000, 1, 1, 23, 59, 59)
+            ]"
+            @change="handleDateRangeChange"
+          ></el-date-picker>
+          <el-select v-model="selectedDevice" placeholder="选择设备" @change="handleDeviceChange" :loading="loading">
+            <el-option
+              v-for="device in devices"
+              :key="device.id"
+              :label="device.name"
+              :value="device.id"
+            ></el-option>
+          </el-select>
+        </div>
+      </template>
+      <el-row :gutter="20">
+        <el-col :span="16">
+          <el-card class="chart-card">
+            <template #header>
+              <div class="chart-header">
+                <h3>压力趋势图</h3>
+                <el-tooltip content="显示选定时间范围内的压力变化趋势" placement="top">
+                  <el-icon><InfoFilled /></el-icon>
+                </el-tooltip>
+              </div>
+            </template>
+            <div ref="lightIntensityTrendChart" class="chart"></div>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card class="chart-card">
+            <template #header>
+              <div class="chart-header">
+                <h3>压力分布</h3>
+                <el-tooltip content="显示不同压力级别的分布情况" placement="top">
+                  <el-icon><InfoFilled /></el-icon>
+                </el-tooltip>
+              </div>
+            </template>
+            <div ref="lightIntensityDistributionChart" class="chart"></div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" style="margin-top: 20px;">
+        <el-col :span="24">
+          <el-card class="chart-card">
+            <template #header>
+              <div class="chart-header">
+                <h3>设备压力详情</h3>
+                <el-tooltip content="显示选中设备的平均、最大和最小压力" placement="top">
+                  <el-icon><InfoFilled /></el-icon>
+                </el-tooltip>
+              </div>
+            </template>
+            <div ref="deviceComparisonChart" class="chart"></div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
@@ -54,9 +78,13 @@ import { ref, onMounted, watch } from 'vue'
 import * as echarts from 'echarts'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { InfoFilled } from '@element-plus/icons-vue'
 
 export default {
   name: 'DataAnalysisView',
+  components: {
+    InfoFilled
+  },
   setup() {
     const dateRange = ref([])
     const selectedDevice = ref('')
@@ -323,13 +351,82 @@ export default {
   padding: 20px;
 }
 
+.page-title {
+  font-size: 24px;
+  color: #303133;
+  margin-bottom: 20px;
+}
+
+.main-card {
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 15px 0;
+}
+
+.chart-card {
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.chart-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #303133;
+}
+
+.chart {
+  height: 400px;
+  padding: 20px;
 }
 
 .el-date-picker {
   margin-right: 20px;
+}
+
+.el-select {
+  width: 200px;
+}
+
+:deep(.el-card__header) {
+  padding: 15px 20px;
+  border-bottom: 1px solid #ebeef5;
+}
+
+:deep(.el-card__body) {
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .el-row {
+    flex-direction: column;
+  }
+
+  .el-col {
+    width: 100% !important;
+    margin-bottom: 20px;
+  }
 }
 </style>
