@@ -28,16 +28,28 @@
       </div>
     </el-card>
 
-    <el-dialog v-model="registerDialogVisible" title="注册新账号" width="30%">
-      <el-form :model="registerForm" :rules="registerRules" ref="registerFormRef">
-        <el-form-item prop="username">
-          <el-input v-model="registerForm.username" placeholder="用户名"></el-input>
+    <el-dialog v-model="registerDialogVisible" title="注册新账号" width="400px" custom-class="register-dialog">
+      <el-form :model="registerForm" :rules="registerRules" ref="registerFormRef" label-position="top">
+        <el-form-item prop="username" label="用户名">
+          <el-input v-model="registerForm.username" placeholder="请输入用户名">
+            <template #prefix>
+              <el-icon><User /></el-icon>
+            </template>
+          </el-input>
         </el-form-item>
-        <el-form-item prop="password">
-          <el-input v-model="registerForm.password" type="password" placeholder="密码"></el-input>
+        <el-form-item prop="password" label="密码">
+          <el-input v-model="registerForm.password" type="password" placeholder="请输入密码" show-password>
+            <template #prefix>
+              <el-icon><Lock /></el-icon>
+            </template>
+          </el-input>
         </el-form-item>
-        <el-form-item prop="confirmPassword">
-          <el-input v-model="registerForm.confirmPassword" type="password" placeholder="确认密码"></el-input>
+        <el-form-item prop="confirmPassword" label="确认密码">
+          <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请再次输入密码" show-password>
+            <template #prefix>
+              <el-icon><Lock /></el-icon>
+            </template>
+          </el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -84,8 +96,14 @@ export default {
     }
 
     const registerRules = {
-      username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-      password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+      username: [
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+        { min: 3, max: 20, message: '用户名长度应在 3 到 20 个字符之间', trigger: 'blur' }
+      ],
+      password: [
+        { required: true, message: '请输入密码', trigger: 'blur' },
+        { min: 6, message: '密码长度不能小于6个字符', trigger: 'blur' }
+      ],
       confirmPassword: [
         { required: true, message: '请确认密码', trigger: 'blur' },
         {
@@ -226,5 +244,41 @@ export default {
 .register-link {
   text-align: center;
   margin-top: 10px;
+}
+
+.register-dialog {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.register-dialog .el-dialog__header {
+  background-color: #409EFF;
+  padding: 20px;
+}
+
+.register-dialog .el-dialog__title {
+  color: #fff;
+  font-size: 20px;
+}
+
+.register-dialog .el-dialog__body {
+  padding: 30px 20px;
+}
+
+.register-dialog .el-form-item__label {
+  font-weight: bold;
+}
+
+.register-dialog .el-input__inner {
+  border-radius: 4px;
+}
+
+.register-dialog .dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.register-dialog .dialog-footer .el-button {
+  min-width: 100px;
 }
 </style>
