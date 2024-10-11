@@ -1,54 +1,67 @@
 <template>
   <div class="device-management">
-    <h2>反应器管理</h2>
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card>
-          <template #header>
-            <div class="card-header">
-              <el-button type="primary" @click="showAddDeviceDialog">添加反应器</el-button>
-              <el-input
-                v-model="searchQuery"
-                placeholder="搜索反应器"
-                style="width: 200px;"
-                @input="handleSearch"
-              ></el-input>
+    <h2 class="page-title">反应器管理</h2>
+    <el-card class="main-card">
+      <template #header>
+        <div class="card-header">
+          <el-button type="primary" @click="showAddDeviceDialog" icon="Plus">添加反应器</el-button>
+          <el-input
+            v-model="searchQuery"
+            placeholder="搜索反应器"
+            class="search-input"
+            @input="handleSearch"
+          >
+            <template #prefix>
+              <el-icon><Search /></el-icon>
+            </template>
+          </el-input>
+        </div>
+      </template>
+      
+      <el-table :data="filteredDevices" style="width: 100%" :row-class-name="tableRowClassName">
+        <el-table-column prop="name" label="反应器名称">
+          <template #default="scope">
+            <div class="device-name">
+              <el-icon :class="{ 'is-active': scope.row.isOn }"><Monitor /></el-icon>
+              <span>{{ scope.row.name }}</span>
             </div>
           </template>
-          <el-table :data="filteredDevices" style="width: 100%">
-            <el-table-column prop="name" label="反应器名称"></el-table-column>
-            <el-table-column prop="macAddress" label="MAC地址"></el-table-column>
-            <el-table-column prop="communicationChannel" label="连接方式"></el-table-column>
-            <el-table-column prop="isOn" label="状态">
-              <template #default="scope">
-                <el-tag :type="scope.row.isOn ? 'success' : 'danger'">
-                  {{ scope.row.isOn ? '在线' : '离线' }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作">
-              <template #default="scope">
-                <el-button size="small" @click="showDeviceDetails(scope.row)">详情</el-button>
-                <el-button size="small" type="danger" @click="deleteDevice(scope.row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 50, 100]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalElements"
-          ></el-pagination>
-        </el-card>
-      </el-col>
-    </el-row>
+        </el-table-column>
+        <el-table-column prop="macAddress" label="MAC地址"></el-table-column>
+        <el-table-column prop="communicationChannel" label="连接方式"></el-table-column>
+        <el-table-column prop="isOn" label="状态">
+          <template #default="scope">
+            <el-tag :type="scope.row.isOn ? 'success' : 'danger'" effect="dark">
+              {{ scope.row.isOn ? '在线' : '离线' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="200">
+          <template #default="scope">
+            <el-button-group>
+              <el-button size="small" type="primary" @click="showDeviceDetails(scope.row)" icon="View">详情</el-button>
+              <el-button size="small" type="danger" @click="deleteDevice(scope.row)" icon="Delete">删除</el-button>
+            </el-button-group>
+          </template>
+        </el-table-column>
+      </el-table>
+      
+      <div class="pagination-container">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalElements"
+        ></el-pagination>
+      </div>
+    </el-card>
 
     <!-- 添加反应器对话框 -->
-    <el-dialog v-model="addDeviceDialogVisible" title="添加反应器" width="30%">
-      <el-form :model="newDevice" :rules="deviceRules" ref="addDeviceFormRef">
+    <el-dialog v-model="addDeviceDialogVisible" title="添加反应器" width="30%" custom-class="custom-dialog">
+      <el-form :model="newDevice" :rules="deviceRules" ref="addDeviceFormRef" label-position="top">
         <el-form-item label="反应器名称" prop="name">
           <el-input v-model="newDevice.name"></el-input>
         </el-form-item>
@@ -83,36 +96,46 @@
     <el-drawer
       v-model="deviceDetailsDrawerVisible"
       title="反应器详情"
-      :with-header="false"
       size="50%"
+      custom-class="custom-drawer"
     >
       <el-descriptions title="反应器信息" :column="1" border>
         <el-descriptions-item label="反应器名称">{{ selectedDevice.name }}</el-descriptions-item>
         <el-descriptions-item label="MAC地址">{{ selectedDevice.macAddress }}</el-descriptions-item>
         <el-descriptions-item label="连接方式">{{ selectedDevice.communicationChannel }}</el-descriptions-item>
         <el-descriptions-item label="状态">
-          <el-tag :type="selectedDevice.isOn ? 'success' : 'danger'">
+          <el-tag :type="selectedDevice.isOn ? 'success' : 'danger'" effect="dark">
             {{ selectedDevice.isOn ? '在线' : '离线' }}
           </el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="压力阈值 (MPa)">{{ selectedDevice.threshold }}</el-descriptions-item>
       </el-descriptions>
-      <el-divider></el-divider>
-      <h3>反应器控制</h3>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="反应器开关">
-            <el-switch v-model="selectedDevice.isOn" @change="toggleDevice"></el-switch>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="压力阈值设置 (MPa)">
-            <el-input-number v-model="selectedDevice.threshold" :min="0" :max="100" :precision="2" :step="0.01" @change="setDeviceThreshold"></el-input-number>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-divider></el-divider>
-      <h3>最近数据</h3>
+      
+      <el-divider content-position="left">反应器控制</el-divider>
+      
+      <el-form label-position="top">
+        <el-form-item label="反应器开关">
+          <el-switch
+            v-model="selectedDevice.isOn"
+            @change="toggleDevice"
+            active-text="开启"
+            inactive-text="关闭"
+          ></el-switch>
+        </el-form-item>
+        <el-form-item label="压力阈值设置 (MPa)">
+          <el-input-number
+            v-model="selectedDevice.threshold"
+            :min="0"
+            :max="100"
+            :precision="2"
+            :step="0.01"
+            @change="setDeviceThreshold"
+          ></el-input-number>
+        </el-form-item>
+      </el-form>
+      
+      <el-divider content-position="left">最近数据</el-divider>
+      
       <div ref="recentDataChart" style="height: 300px;"></div>
     </el-drawer>
   </div>
@@ -337,21 +360,83 @@ export default {
   padding: 20px;
 }
 
+.page-title {
+  font-size: 24px;
+  color: #303133;
+  margin-bottom: 20px;
+}
+
+.main-card {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.el-divider {
-  margin: 20px 0;
+.search-input {
+  width: 300px;
+}
+
+.device-name {
+  display: flex;
+  align-items: center;
+}
+
+.device-name .el-icon {
+  margin-right: 8px;
+  font-size: 18px;
+  color: #909399;
+}
+
+.device-name .el-icon.is-active {
+  color: #67C23A;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.custom-dialog .el-dialog__body {
+  padding-top: 10px;
+}
+
+.custom-drawer .el-drawer__body {
+  padding: 20px;
+}
+
+.el-descriptions {
+  margin-bottom: 20px;
 }
 
 .wide-input-number {
   width: 100%;
 }
 
-.wide-input-number :deep(.el-input__inner) {
-  text-align: left;
+.el-divider__text {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* 为表格添加交替背景色 */
+.el-table .el-table__row:nth-child(even) {
+  background-color: #f9fafc;
+}
+
+/* 鼠标悬停效果 */
+.el-table .el-table__row:hover {
+  background-color: #ecf5ff;
+}
+
+/* 自定义表格行样式 */
+.el-table .warning-row {
+  background-color: #fdf5e6;
+}
+
+.el-table .success-row {
+  background-color: #f0f9eb;
 }
 </style>
