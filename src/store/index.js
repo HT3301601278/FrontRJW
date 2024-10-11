@@ -27,8 +27,9 @@ export default createStore({
     },
     logout({ commit }) {
       commit('setAuthenticated', false)
-      commit('setUser', null)
+      commit('clearUser')
       localStorage.removeItem('user')
+      localStorage.removeItem('isAuthenticated')
     }
   }
 })

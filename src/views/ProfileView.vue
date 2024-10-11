@@ -123,8 +123,8 @@ export default {
       })
     }
 
-    const username = computed(() => store.state.user.username)
-    const userId = computed(() => store.state.user.id)
+    const username = computed(() => store.state.user?.username || '未登录')
+    const userId = computed(() => store.state.user?.id || '未知')
     const userAvatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
     const lastLogin = ref('2023-06-01 10:30:00') // 这里应该从后端获取实际的最后登录时间
 

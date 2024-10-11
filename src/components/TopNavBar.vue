@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowDown, Odometer, Monitor, DataLine, Bell } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
@@ -63,8 +63,8 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const store = useStore()
-    const username = ref('用户') // 这里应该从store或API获取用户名
-    const avatarUrl = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png') // 默认头像
+    const username = computed(() => store.state.user?.username || '未登录')
+    const avatarUrl = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
 
     const goToProfile = () => {
       router.push('/profile')
